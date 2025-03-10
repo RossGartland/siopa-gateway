@@ -33,11 +33,17 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, metrics, prometheus
-  metrics:
-    export:
-      prometheus:
-        enabled: true
-  health:
-    defaults:
-      enabled: true
+        include: health, info, metrics # Expose essential Actuator endpoints
+  endpoint:
+    health:
+      show-details: always # Show detailed health information
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
